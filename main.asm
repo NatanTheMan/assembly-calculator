@@ -1,47 +1,30 @@
-section .bss
-  first_num: resb 10
-  second_num: resb 10
-
 section .data
-  msg_first_input: db "Enter first number: "
-  msg_second_input: db "Enter second number: "
+  msg_first_num: db "Enter first number: "
+  msg_first_num_len: equ $ - msg_first_num
+
+  msg_second_num: db "Enter second number: "
+  msg_second_num_len: equ $ - msg_second_num
 
 section .text
   global _start
 
 _start:
-  call read_first_number
-  call read_second_number
+  mov rax, msg_first_num
+  mov rdi, msg_first_num_len
+  call print_msg
+
+  mov rax, msg_second_num
+  mov rdi, msg_second_num_len
+  call print_msg
   
   jmp exit
 
-read_first_number:
+print_msg:
+  mov rsi, rax
+  mov rdx, rdi
+
   mov rax, 1
   mov rdi, 1
-  mov rsi, msg_first_input
-  mov rdx, 20
-  syscall
-
-  mov rsi, first_num
-  call read_input
-  ret
-
-read_second_number:
-  mov rax, 1
-  mov rdi, 1
-  mov rsi, msg_second_input
-  mov rdx, 21
-  syscall
-
-  mov rsi, second_num
-  call read_input
-  ret
-
-
-read_input:
-  mov rax, 0
-  mov rdi, 0
-  mov rdx, 10
   syscall
   ret
 
